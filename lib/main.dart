@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() {
+
+
+//void main() {
+  //runApp(MyApp());
+//}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
   runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -197,83 +210,121 @@ class PichoneraForm extends StatefulWidget {
 
 
 class _PichoneraFormState extends State<PichoneraForm> {
-  final TextEditingController datoController = TextEditingController();
-  final TextEditingController otroCampoController = TextEditingController();
-  final TextEditingController textoAbajoController = TextEditingController();
+  final TextEditingController campoTextoController = TextEditingController();
+  final TextEditingController campoAdicionalController = TextEditingController();
 
-  String nombre = 'Nombre de la pichonera';
-  String? imagenUrl; // Aquí podrías cargar una imagen desde red o local
+  String etiquetaTexto = 'Nombre de la pichonera';
+  String etiquetaDerecha = 'Código: P-09';
+  String etiquetaAbajo = 'Observaciones generales';
+  String? imagenUrl;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Formulario de Pichoneras')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      appBar: AppBar(title: const Text('Formulario de Pichoneras'), centerTitle: true),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Parte superior: dos columnas
+            // 🔷 Dos Cards en la parte superior
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Columna izquierda
+                // Card izquierda
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFormField(
-                        controller: datoController,
-                        decoration: InputDecoration(labelText: 'Dato'),
+                  child: Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFormField(
+                            controller: campoTextoController,
+                            decoration: const InputDecoration(labelText: 'Dato'),
+                          ),
+                          const SizedBox(height: 12),
+                          Text('Etiqueta: $etiquetaTexto', style: const TextStyle(fontSize: 16)),
+                          const SizedBox(height: 12),
+                          Container(
+                            height: 120,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: imagenUrl != null
+                                ? Image.network(imagenUrl!, fit: BoxFit.cover)
+                                : const Icon(Icons.image, size: 48),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 16),
-                      Text('Nombre: $nombre'),
-                      SizedBox(height: 16),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        color: Colors.grey[300],
-                        child: imagenUrl != null
-                            ? Image.network(imagenUrl!)
-                            : Icon(Icons.image, size: 48),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-                SizedBox(width: 16),
-                // Columna derecha
+                const SizedBox(width: 16),
+                // Card derecha
                 Expanded(
-                  child: TextFormField(
-                    controller: otroCampoController,
-                    decoration: InputDecoration(labelText: 'Otro campo'),
+                  child: Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            etiquetaDerecha,
+                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 24),
-            // Campo de texto abajo
-            TextFormField(
-              controller: textoAbajoController,
-              decoration: InputDecoration(labelText: 'Datos adicionales'),
-              maxLines: 3,
+            const SizedBox(height: 16),
+            // 🔶 Card inferior con campos adicionales
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: campoAdicionalController,
+                      decoration: const InputDecoration(labelText: 'Datos adicionales'),
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 12),
+                    Text('Etiqueta: $etiquetaAbajo', style: const TextStyle(fontSize: 16)),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        // lógica para tomar evidencia
+                      },
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text('Tomar evidencia'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 48),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            SizedBox(height: 24),
-            // Botón para tomar foto
-            ElevatedButton.icon(
-              onPressed: () {
-                // Aquí iría la lógica para tomar foto
-              },
-              icon: Icon(Icons.camera_alt),
-              label: Text('Tomar foto'),
-            ),
-            Spacer(),
-            // Botón de guardar
+            const SizedBox(height: 16),
+            // ✅ Botón de guardar
             ElevatedButton(
               onPressed: () {
-                // Guardar datos
+                // lógica para guardar
               },
-              child: Text('Guardar'),
+              child: const Text('Guardar'),
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 48),
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 48),
               ),
             ),
           ],
