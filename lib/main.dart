@@ -213,19 +213,20 @@ class _PichoneraFormState extends State<PichoneraForm> {
   final TextEditingController campoTextoController = TextEditingController();
   final TextEditingController campoAdicionalController = TextEditingController();
 
-  String etiquetaTexto = 'Nombre de la pichonera';
-  String etiquetaDerecha = 'Código: P-09';
-  String etiquetaAbajo = 'Observaciones generales';
+  String etiquetaTexto = 'N';
+  String etiquetaDerecha = 'P-09';
+  String etiquetaAbajo = 'N';
   String? imagenUrl;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Formulario de Pichoneras'), centerTitle: true),
+      //appBar: AppBar(title: const Text('Formulario de Pichoneras'), centerTitle: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            const SizedBox(height: 50), // 🔽 Espacio superior
             // 🔷 Dos Cards en la parte superior
             Row(
               children: [
@@ -240,15 +241,15 @@ class _PichoneraFormState extends State<PichoneraForm> {
                         children: [
                           TextFormField(
                             controller: campoTextoController,
-                            decoration: const InputDecoration(labelText: 'Dato'),
+                            decoration: const InputDecoration(labelText: 'Numero de empleado'),
                           ),
                           const SizedBox(height: 12),
-                          Text('Etiqueta: $etiquetaTexto', style: const TextStyle(fontSize: 16)),
+                          Text('Nombre: $etiquetaTexto', style: const TextStyle(fontSize: 16)),
                           const SizedBox(height: 12),
                           Container(
                             height: 120,
                             decoration: BoxDecoration(
-                              color: Colors.grey[300],
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: imagenUrl != null
@@ -265,6 +266,7 @@ class _PichoneraFormState extends State<PichoneraForm> {
                 Expanded(
                   child: Card(
                     elevation: 4,
+                    //color: Colors.blue[100], // 🎨 Cambiar color de fondo
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(
@@ -272,7 +274,8 @@ class _PichoneraFormState extends State<PichoneraForm> {
                         children: [
                           Text(
                             etiquetaDerecha,
-                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center, // 🧭 Centrar texto dentro del Text
                           ),
                         ],
                       ),
@@ -292,11 +295,11 @@ class _PichoneraFormState extends State<PichoneraForm> {
                   children: [
                     TextFormField(
                       controller: campoAdicionalController,
-                      decoration: const InputDecoration(labelText: 'Datos adicionales'),
+                      decoration: const InputDecoration(labelText: 'Numero empleado guardia'),
                       maxLines: 3,
                     ),
                     const SizedBox(height: 12),
-                    Text('Etiqueta: $etiquetaAbajo', style: const TextStyle(fontSize: 16)),
+                    Text(' $etiquetaAbajo', style: const TextStyle(fontSize: 16)),
                     const SizedBox(height: 16),
                     ElevatedButton.icon(
                       onPressed: () {
@@ -305,7 +308,7 @@ class _PichoneraFormState extends State<PichoneraForm> {
                       icon: const Icon(Icons.camera_alt),
                       label: const Text('Tomar evidencia'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
+                        backgroundColor: Colors.blue,
                         foregroundColor: Colors.white,
                         minimumSize: const Size(double.infinity, 48),
                       ),
